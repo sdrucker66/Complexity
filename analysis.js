@@ -115,18 +115,40 @@ function complexity(filePath)
 	// Tranverse program with a function visitor.
 	traverseWithParents(ast, function (node) 
 	{
-		if (node.type === 'FunctionDeclaration') 
-		{
+		if (node.type === 'FunctionDeclaration') {
 			var builder = new FunctionBuilder();
 
 			builder.FunctionName = functionName(node);
-			builder.StartLine    = node.loc.start.line;
+			builder.StartLine = node.loc.start.line;
 
 			builders[builder.FunctionName] = builder;
+
+			builder.ParameterCount = node.params.length;
+			var max = 0;
+			traverseWithParents(node, function (node) {
+				if (isDecision(node)) {
+					builder.SimpleCyclomaticComplexity += 1;
+
+					if (decCount(node) > max) {
+						max = decCount(node);
+					}
+				}
+			});
+
+
+			builder.MaxConditions = max;
+			if (builder.MaxConditions > 1) {
+				builder.MaxConditions += 1;
+			}
+
 		}
 
-	});
+		if (node.type === 'Literal') {
+			fileBuilder.Strings += 1;
+		}
 
+
+	});
 }
 
 // Helper function for counting children of node.
