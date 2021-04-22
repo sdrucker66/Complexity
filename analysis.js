@@ -150,7 +150,24 @@ function complexity(filePath)
 
 	});
 }
+function decCount(node) {
+	var max = 0;
+	var ifStatement;
+	ifStatement = false;
 
+	traverseWithParents(node, function (node) {
+		if (node.type === 'IfStatement') {
+			ifStatement = true;
+		}
+		if (node.type === 'LogicalExpression' && ((node.operator === '||') || (node.operator === '&&'))) {
+			max++;
+		}
+	});
+	if (max === 0 && ifStatement) {
+		return 1
+	}
+	return max;
+}
 // Helper function for counting children of node.
 function childrenLength(node)
 {
