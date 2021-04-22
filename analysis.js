@@ -26,6 +26,7 @@ function main()
 
 
 var builders = {};
+var strings = 0;
 
 // Represent a reusable "class" following the Builder pattern.
 function FunctionBuilder()
@@ -145,10 +146,12 @@ function complexity(filePath)
 
 		if (node.type === 'Literal') {
 			fileBuilder.Strings += 1;
+			strings +=1;
 		}
 
 
 	});
+	strings= fileBuilder.Strings;
 }
 function decCount(node) {
 	var max = 0;
@@ -306,4 +309,9 @@ function Crazy (argument)
 			mints.toString().split(".")[0] + " " + szmin;
 	}
 }
+
+function getStrings(){
+	return strings;
+}
+exports.getStrings = getStrings;
 exports.complexity = complexity;
